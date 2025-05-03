@@ -11,13 +11,13 @@ import { usePathname } from "next/navigation";
 
 const links: { title: string; href: string; enabled: boolean, active: boolean,}[] = [
     {
-        title: "Contact us",
+        title: "Contact Us",
         href: "/static/contact-us",
         enabled: true,
         active: false,
     },
     {
-        title: "Login",
+        title: "Log in",
         href: "/static/login",
         enabled: true,
         active: false,
@@ -29,11 +29,11 @@ interface NavBarProps {
 }
 
 export default function NavBar({ pageName = "" }: NavBarProps) {
-    const pathname = usePathname(); // Get the current route
-    const currentLink = links.find((link) => link.href === pathname);
-    if (currentLink) {
-        currentLink.active = true; // Set the active link based on the current route
-    }
+    const pathname = usePathname(); // TODO:
+    const updatedLinks = links.map((link) => ({
+        ...link,
+        active: link.href === pathname, 
+    }));
     console.log(`Current pathname: ${pathname}`);
 
     return (
@@ -46,16 +46,15 @@ export default function NavBar({ pageName = "" }: NavBarProps) {
                             ☰
                         </Button>
                     </NavigationMenuItem>
-                    {links.map(
+                    {updatedLinks.map(
                         (link) =>
                             link.enabled && (
                                 <NavigationMenuItem key={link.title}>
                                     <NavigationMenuLink
                                         href={link.href}
-                                        className={
-                                            `text-foreground px-6 py-2 rounded-md text-sm 
-                                            ${link.active ? ` ` : ``}  `}>
-                                        {link.title}
+                                        variant={link.active ? "active" : "default"}
+                                        className="text-foreground px-6 py-2 rounded-md text-sm"
+                                        >{link.title}
                                     </NavigationMenuLink>
                                 </NavigationMenuItem>
                             )
