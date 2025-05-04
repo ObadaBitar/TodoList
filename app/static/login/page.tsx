@@ -1,13 +1,76 @@
 "use client";
-// import { useEffect, useState } from "react";
+import NavBar from "@/app/static/components/NavBar";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea"
 
-import NavBar from "@/app/static/NavBar";
-export default function Home() {
+const formSchema = z.object({
+  username: z.string().min(1, {
+    message: "Username is required",
+  }),
+  email: z.string().email({
+    message: "Invalid email address",
+  }),
+  password: z.string().min(1, {
+    message: "Password is required",
+  }),
+  rePassword: z.string().min(1, {
+    message: "Re-Password is required",
+  }),
+})
 
-  const validateUserInput = () => {
-    event.preventDefault();
+const fields: Array<{
+  name: keyof z.infer<typeof formSchema>; label: string;
+  placeholder: string; type?: "input" | "textarea";
+}> = [
+    {
+      name: "username",
+      label: "Name",
+      placeholder: "Enter your name",
+    },
+    {
+      name: "email",
+      label: "Email",
+      placeholder: "Enter your email",
+    },
+    {
+      name: "password",
+      label: "Message",
+      placeholder: "Enter your password",
+    },
+    {
+      name: "rePassword",
+      label: "Re-Password",
+      placeholder: "Enter your password again",
+    },
+  ];
+
+export default function login() {
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+      rePassword: "",
+    },
+  })
+
+  const validateUserInput = (values: z.infer<typeof formSchema>) => {
     // Handle form submission logic here
-    console.log("Form submitted");
+    console.log(values);
   };
 
   return (

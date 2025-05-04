@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -12,13 +13,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html>
-      <body className="flex flex-col justify-between">
-        {children}
-        <footer className="flex center-center p-2 border-t-2 border-x-border">
-          <p>Task manger &copy; {new Date().getFullYear()}</p>
-        </footer>
-      </body>
-    </html>
+    <>
+      <html lang="en" suppressHydrationWarning>
+        <head />
+        <body className="flex flex-col justify-between">
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+            <footer className="flex center-center p-2 border-t-2 border-x-border">
+              <p>Task manger &copy; {new Date().getFullYear()}</p>
+            </footer>
+          </ThemeProvider>
+        </body >
+      </html >
+    </>
   );
 }

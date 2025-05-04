@@ -1,5 +1,5 @@
 "use client";
-import NavBar from "@/app/static/NavBar";
+import NavBar from "@/app/static/components/NavBar";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -70,18 +70,18 @@ export default function ContactUs() {
       <main>
         <h1 className="text-4xl text-center">Contact us</h1>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-7">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 px-7 py-3">
             {fields.map((field) => (
               <FormField
                 key={field.name}
                 control={form.control}
                 name={field.name}
                 render={({ field: inputField }) => (
-                  <FormItem>
+                  <FormItem className="space-y-1">
                     <FormLabel>{field.label}</FormLabel>
                     <FormControl>
                       {field.type === "textarea" ? (
-                        <Textarea className="h-75" placeholder={field.placeholder} {...inputField} />
+                        <Textarea className="h-76" placeholder={field.placeholder} {...inputField} />
                       ) : (
                         <Input placeholder={field.placeholder} {...inputField} />
                       )}
@@ -92,7 +92,7 @@ export default function ContactUs() {
               />
             ))}
             <div className="flex items-center w-full justify-center ">
-              <Button className="self-end w-50 p-5 text-1xl" type="submit" >Contact</Button>
+              <Button variant="outline" className="self-end w-full p-5 text-1xl" type="submit" >Contact</Button>
             </div>
           </form>
         </Form>

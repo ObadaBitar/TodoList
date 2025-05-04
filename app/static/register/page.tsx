@@ -1,8 +1,8 @@
 "use client";
 // import { useEffect, useState } from "react";
 
-import NavBar from "@/app/static/NavBar";
-export default function Home() {
+import NavBar from "@/app/static/components/NavBar";
+export default function register() {
 
   const validateUserInput = () => {
     event.preventDefault();
