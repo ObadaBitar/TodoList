@@ -1,9 +1,10 @@
 "use client";
-import NavBar from "@/app/static/components/NavBar";
+import NavBar from "@/app/static/components/nav-bar";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import ResponsiveTitle from "@/components/responsive-title";
 import {
   Form,
   FormControl,
@@ -14,6 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea"
+import Link from "next/link";
 
 const formSchema = z.object({
   username: z.string().min(1, {
@@ -36,28 +38,18 @@ const fields: Array<{
 }> = [
     {
       name: "username",
-      label: "Name",
+      label: "Username",
       placeholder: "Enter your name",
     },
     {
-      name: "email",
-      label: "Email",
-      placeholder: "Enter your email",
-    },
-    {
       name: "password",
-      label: "Message",
+      label: "Password",
       placeholder: "Enter your password",
-    },
-    {
-      name: "rePassword",
-      label: "Re-Password",
-      placeholder: "Enter your password again",
     },
   ];
 
-export default function login() {
 
+export default function Login() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -75,44 +67,38 @@ export default function login() {
 
   return (
     <>
-      <NavBar pageName="" />
-      <main>
-        <h1 className="text-4xl text-center">
-          Register page
-        </h1>
-
-        <form onSubmit={validateUserInput}>
-          <div className="input">
-            <label htmlFor="usernName">User Name</label>
-            <input type="text" id="usernName"></input>
-          </div>
-
-          <div className="input">
-            <label htmlFor="email">Email</label>
-            <input type="text" id="email"></input>
-          </div>
-
-          <div className="input">
-            <label htmlFor="password">Password</label>
-            <input type="text" id="password"></input>
-          </div>
-
-          <div className="input">
-            <label htmlFor="rePassowrd">Re-Passowrd</label>
-            <input type="text" id="rePassowrd"></input>
-          </div>
-
-          <div className="input tick-box">
-            <input type="checkbox" id="showPassword"></input>
-            <label htmlFor="showPassword">Show password</label>
-          </div>
-
-          <div className="submitForm">
-            <input type="submit" id="registerBtn" value="Register now!"></input>
-          </div>
-
-        </form>
-      </main>
+      <NavBar pageName="Log in" />
+      <main className="flex justify-center h-screen">
+        <ResponsiveTitle title="Log in" />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(validateUserInput)} className="space-y-5 px-7 py-3">
+            {fields.map((field) => (
+              <FormField
+                key={field.name}
+                control={form.control}
+                name={field.name}
+                render={({ field: inputField }) => (
+                  <FormItem className="space-y-1">
+                    <FormLabel>{field.label}</FormLabel>
+                    <FormControl>
+                      {field.type === "textarea" ? (
+                        <Textarea className="h-80" placeholder={field.placeholder} {...inputField} />
+                      ) : (
+                        <Input placeholder={field.placeholder} {...inputField} />
+                      )}
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ))}
+              <Button variant="link" className="p-0 text-1xl" type="submit" ><Link href={"/static/reset-password"}>Reset password</Link></Button>
+            <div className="flex items-center w-full justify-center ">
+              <Button variant="outline" className="self-end w-full p-5 text-1xl" type="submit" >Log in</Button>
+            </div>
+          </form>
+        </Form>
+      </main >
     </>
   );
 }

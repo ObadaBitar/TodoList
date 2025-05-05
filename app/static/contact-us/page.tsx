@@ -1,5 +1,5 @@
 "use client";
-import NavBar from "@/app/static/components/NavBar";
+import NavBar from "@/app/static/components/nav-bar";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea"
-
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -36,11 +36,13 @@ const fields: Array<{
       name: "name",
       label: "Name",
       placeholder: "Enter your name",
+      type: "input",
     },
     {
       name: "email",
       label: "Email",
       placeholder: "Enter your email",
+      type: "input",
     },
     {
       name: "message",
@@ -64,11 +66,14 @@ export default function ContactUs() {
     console.log(values);
   }
 
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
+
   return (
     <>
-      <NavBar pageName="" />
-      <main>
-        <h1 className="text-4xl text-center">Contact us</h1>
+      <NavBar pageName="Contact Us" />
+      <main >
+        {isMobile ?(<></>) :(<h1 className="text-4xl w-full text-center p-1">Contact us page</h1>)}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 px-7 py-3">
             {fields.map((field) => (
@@ -81,7 +86,7 @@ export default function ContactUs() {
                     <FormLabel>{field.label}</FormLabel>
                     <FormControl>
                       {field.type === "textarea" ? (
-                        <Textarea className="h-76" placeholder={field.placeholder} {...inputField} />
+                        <Textarea className="h-50" placeholder={field.placeholder} {...inputField} />
                       ) : (
                         <Input placeholder={field.placeholder} {...inputField} />
                       )}
