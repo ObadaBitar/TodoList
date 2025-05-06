@@ -1,9 +1,10 @@
 import { RowDataPacket } from "mysql2/promise";
 import pool from "@/lib/db_config";
 
-interface IsUniqueResult extends RowDataPacket {
+interface Result extends RowDataPacket {
   isUserNameUnique: number;
   isEmailUnique: number;
+  isValidUser: number;
 }
 
 const check_username = async (username: string): Promise<boolean> => {
@@ -14,7 +15,7 @@ const check_username = async (username: string): Promise<boolean> => {
       EXISTS(SELECT 1 FROM user WHERE userName = ?) 
       AS isUserNameUnique
     `;
-    const [rows] = await pool.execute<IsUniqueResult[]>(query, [username]);
+    const [rows] = await pool.execute<Result[]>(query, [username]);
     const isUnique = rows[0].isUserNameUnique === 0;
     return isUnique;
   } catch (error) {
@@ -31,7 +32,7 @@ const check_email = async (email: string): Promise<boolean> => {
       EXISTS(SELECT 1 FROM user WHERE userEmail = ?) 
       AS isEmailUnique
     `;
-    const [rows] = await pool.execute<IsUniqueResult[]>(query, [email]);
+    const [rows] = await pool.execute<Result[]>(query, [email]);
     const isUnique = rows[0].isEmailUnique === 0;
     return isUnique;
   }
@@ -56,7 +57,25 @@ const add_user = async (username: string, email: string, password: string): Prom
   }
 };
 
+const check_valid_user = async (username: string, password: string): Promise<boolean> => {
+  try {
+    const query =
+      `
+      SELECT 
+      EXISTS(SELECT 1 FROM user WHERE userName = ? AND userPassword = ?) 
+      AS isValidUser
+    `;
+    const [rows] = await pool.execute<Result[]>(query, [username, password]);
+    const isValidUser = rows[0].isValidUser === 1;
+    return isValidUser;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch data.");
+  }
+};
+
 export {
   check_username, check_email,
-  add_user
+  add_user,
+  check_valid_user,
 };

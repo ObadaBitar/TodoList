@@ -53,7 +53,6 @@ const checkEmailUnique = async (email: string) => {
       const errorDetails = await response.text();
       throw new Error(`Network response was not ok: ${response.status} - ${errorDetails}`);
     }
-
     const data = await response.json();
     return data.isUnique;
   } catch (error) {
@@ -72,13 +71,11 @@ const addUser = async (username: string, email: string, password: string) => {
       body: JSON.stringify({ username, email, password }),
     });
     if (!response.ok) {
-      const errorDetails = await response.text();
+    const errorDetails = await response.text();
       throw new Error(`Network response was not ok: ${response.status} - ${errorDetails}`);
     }
-    else {
-      const data = await response.json();
-      return data;
-    }
+    const data = await response.json();
+    return data.addUser;
   }
   catch (error) {
     console.error("Error adding user:", error);
@@ -154,7 +151,7 @@ const fields: Array<{
   ];
 
 export default function Register() {
-  const router = useRouter()
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -198,7 +195,7 @@ export default function Register() {
                   <FormItem className="space-y-1">
                     <FormLabel>{field.label}</FormLabel>
                     <FormControl>
-                      {field.name  === "password" || field.name  === "rePassword" ? (
+                      {field.name === "password" || field.name === "rePassword" ? (
                         <Input placeholder={field.placeholder} {...inputField} /> //TODO: ADD a hide and show password button
                       ) : (
                         <Input placeholder={field.placeholder} {...inputField} />

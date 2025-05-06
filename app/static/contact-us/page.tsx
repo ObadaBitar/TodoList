@@ -72,7 +72,7 @@ export default function ContactUs() {
   return (
     <>
       <NavBar pageName="Contact Us" />
-      <main >
+      <main className="flex justify-center">
         {isMobile ?(<></>) :(<h1 className="text-4xl w-full text-center p-1">Contact us page</h1>)}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 px-7 py-3">
