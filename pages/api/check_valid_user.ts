@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-        const isValidUser = await check_valid_user(userName ,userPassword);
+        const isValidUser = await check_valid_user(userName, userPassword);
         return res.status(200).json({ isValidUser });
     } catch (error) {
         console.error("Error checking user validity:", error);

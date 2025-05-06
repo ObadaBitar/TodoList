@@ -172,7 +172,7 @@ export default function Register() {
         const password = parsedData.password.toString();
         const result = await addUser(username, email, password);
         if (result) {
-          router.push("/dashboard");
+          router.push("/dashboard/personal-tasks"); 
         }
       }
     } catch (error) {

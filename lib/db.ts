@@ -57,7 +57,7 @@ const add_user = async (username: string, email: string, password: string): Prom
   }
 };
 
-const check_valid_user = async (username: string, password: string): Promise<boolean> => {
+const check_valid_user = async (userName: string, userPassword: string): Promise<boolean> => {
   try {
     const query =
       `
@@ -65,7 +65,7 @@ const check_valid_user = async (username: string, password: string): Promise<boo
       EXISTS(SELECT 1 FROM user WHERE userName = ? AND userPassword = ?) 
       AS isValidUser
     `;
-    const [rows] = await pool.execute<Result[]>(query, [username, password]);
+    const [rows] = await pool.execute<Result[]>(query, [userName, userPassword]);
     const isValidUser = rows[0].isValidUser === 1;
     return isValidUser;
   } catch (error) {

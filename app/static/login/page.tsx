@@ -83,8 +83,11 @@ export default function Login() {
         const password = parsedData.password.toString();
         const result = await checkUser(username, password);
         if (result) {
-          router.push("/dashboard");
+          router.push("/dashboard/personal-tasks"); 
         }
+        // else{
+        //   // TODO: Show error message to user maybe alert
+        // }
       }
     } catch (error) {
       console.error("Validation failed:", error);
