@@ -14,21 +14,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea"
 import Link from "next/link";
 
 const formSchema = z.object({
   username: z.string().min(1, {
     message: "Username is required",
   }),
-  email: z.string().email({
-    message: "Invalid email address",
-  }),
   password: z.string().min(1, {
     message: "Password is required",
-  }),
-  rePassword: z.string().min(1, {
-    message: "Re-Password is required",
   }),
 })
 
@@ -54,9 +47,7 @@ export default function Login() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
-      email: "",
       password: "",
-      rePassword: "",
     },
   })
 
@@ -81,8 +72,8 @@ export default function Login() {
                   <FormItem className="space-y-1">
                     <FormLabel>{field.label}</FormLabel>
                     <FormControl>
-                      {field.type === "textarea" ? (
-                        <Textarea className="h-80" placeholder={field.placeholder} {...inputField} />
+                      {field.name === "password" ? (
+                        <Input placeholder={field.placeholder} {...inputField} /> // Make a button to show and hide password 
                       ) : (
                         <Input placeholder={field.placeholder} {...inputField} />
                       )}
