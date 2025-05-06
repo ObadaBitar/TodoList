@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import NavBar from "@/app/static/components/nav-bar";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,7 +16,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea"
 import Link from "next/link";
 const checkUsernameUnique = async (username: string) => {
   try {
