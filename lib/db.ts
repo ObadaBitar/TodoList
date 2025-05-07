@@ -81,12 +81,12 @@ interface UserTaskLists extends RowDataPacket {
   taskListName: string;
 }
 
-const fetch_user_taskLists = async (userID: string): Promise<UserTaskLists[]> => {
+const fetch_user_task_lists = async (userID: number): Promise<UserTaskLists[]> => {
   try {
     const query =
       `
       SELECT taskListID, taskListName
-      FROM taskList
+      FROM tasklist
       WHERE userID = ?
     `;
     const [rows] = await pool.execute<UserTaskLists[]>(query, [userID]);
@@ -102,5 +102,5 @@ export {
   check_username, check_email,
   add_user,
   check_valid_user,
-  fetch_user_taskLists,
+  fetch_user_task_lists,
 };
