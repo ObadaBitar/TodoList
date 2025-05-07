@@ -71,7 +71,7 @@ const addUser = async (username: string, email: string, password: string) => {
       body: JSON.stringify({ username, email, password }),
     });
     if (!response.ok) {
-    const errorDetails = await response.text();
+      const errorDetails = await response.text();
       throw new Error(`Network response was not ok: ${response.status} - ${errorDetails}`);
     }
     const data = await response.json();
@@ -171,8 +171,9 @@ export default function Register() {
         const email = parsedData.email.toString();
         const password = parsedData.password.toString();
         const result = await addUser(username, email, password);
-        if (result) {
-          router.push("/dashboard/personal-tasks"); 
+        if (result > 0) {
+          localStorage.setItem('userId', result.toString());
+          router.push("/dashboard/personal-tasks");
         }
       }
     } catch (error) {

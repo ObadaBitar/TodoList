@@ -10,7 +10,7 @@ interface Result extends RowDataPacket {
 const check_username = async (username: string): Promise<boolean> => {
   try {
     const query =
-    `
+      `
       SELECT 
       EXISTS(SELECT 1 FROM user WHERE userName = ?) 
       AS isUserNameUnique
@@ -57,18 +57,42 @@ const add_user = async (username: string, email: string, password: string): Prom
   }
 };
 
-const check_valid_user = async (userName: string, userPassword: string): Promise<boolean> => {
+const check_valid_user = async (userName: string, userPassword: string): Promise<number> => {
   try {
     const query =
       `
-      SELECT 
-      EXISTS(SELECT 1 FROM user WHERE userName = ? AND userPassword = ?) 
-      AS isValidUser
+      SELECT userID
+      FROM user
+      WHERE userName = ? AND userPassword = ?
     `;
     const [rows] = await pool.execute<Result[]>(query, [userName, userPassword]);
-    const isValidUser = rows[0].isValidUser === 1;
-    return isValidUser;
+    if (rows.length === 0) {
+      return 0; 
+    }
+     return rows[0].userID;;
   } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch data.");
+  }
+};
+
+interface UserTaskLists extends RowDataPacket {
+  taskListID: number;
+  taskListName: string;
+}
+
+const fetch_user_taskLists = async (userID: string): Promise<UserTaskLists[]> => {
+  try {
+    const query =
+      `
+      SELECT taskListID, taskListName
+      FROM taskList
+      WHERE userID = ?
+    `;
+    const [rows] = await pool.execute<UserTaskLists[]>(query, [userID]);
+    return rows;
+  }
+  catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to fetch data.");
   }
@@ -78,4 +102,5 @@ export {
   check_username, check_email,
   add_user,
   check_valid_user,
+  fetch_user_taskLists,
 };

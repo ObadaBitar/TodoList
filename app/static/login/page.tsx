@@ -82,7 +82,8 @@ export default function Login() {
         const username = parsedData.username.toString();
         const password = parsedData.password.toString();
         const result = await checkUser(username, password);
-        if (result) {
+        if (result > 0) {
+          localStorage.setItem('userId', result.toString());  
           router.push("/dashboard/personal-tasks"); 
         }
         // else{

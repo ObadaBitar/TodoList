@@ -15,8 +15,8 @@ import { MenuIcon } from "lucide-react";
 const links = [
     {
         items: [
-            { title: "Contact Us", href: "/static/contact-us", enabled: true },
-            { title: "About Us", href: "/static/about-us", enabled: true },
+            { title: "Group tasks", href: "/dashboard/group-tasks", enabled: true },
+            { title: "Personal tasks", href: "/dashboard/personal-tasks", enabled: true },
         ],
     },
     // {
@@ -26,8 +26,7 @@ const links = [
     // },
     {
         items: [
-            { title: "Log in", href: "/static/login", enabled: true },
-            { title: "Create Account", href: "/static/register", enabled: true },
+            { title: "Log out", href: "/static/login", enabled: true },
             { title: "Toggle Mode", href: "/", enabled: true, toggle: ModeToggle },
         ],
     },
