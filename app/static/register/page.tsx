@@ -89,40 +89,23 @@ const formSchema = z.object({
   username: z.string()
     .min(1, { message: "Username is required" })
     .min(3, { message: "Username must be at least 3 characters" })
-    .regex(/^[a-z0-9]+$/i, { message: "Username must contain only alphanumeric characters" })
-    .refine(async (val) => {
-      const isUsernameUnique: boolean = await checkUsernameUnique(val);
-      return isUsernameUnique;
-    }, { message: "Username already exists" }),
+    .regex(/^[a-z0-9]+$/i, { message: "Username must contain only alphanumeric characters" }),
   email: z.string()
-    .email({ message: "Invalid email address" })
-    .refine(async (val) => {
-      const isEmailUnique: boolean = await checkEmailUnique(val);
-      return isEmailUnique;
-    }, { message: "Email already exists" }),
+    .min(1, { message: "Email is required" })
+    .email({ message: "Invalid email address" }),
   password: z.string()
     .min(8, { message: "Password must be at least 8 characters" })
     .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter" })
     .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter" })
     .regex(/[0-9]/, { message: "Password must contain at least one number" })
     .regex(/[@$!%*?&#]/, { message: "Password must contain at least one special character" }),
-  rePassword: z.string().min(1, { message: "Re-Password is required" }),
-}).superRefine((data, ctx) => {
-  if (data.rePassword !== data.password) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: "Passwords do not match",
-      path: ["rePassword"],
-    });
-  }
-  if (data.rePassword !== data.password) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: "Passwords do not match",
-      path: ["password"],
-    });
-  }
+  rePassword: z.string()
+    .min(1, { message: "Re-Password is required" }),
+}).refine((data) => data.password === data.rePassword, {
+  message: "Passwords do not match",
+  path: ["rePassword"],
 });
+
 
 const fields: Array<{
   name: keyof z.infer<typeof formSchema>; label: string;
@@ -165,17 +148,29 @@ export default function Register() {
 
   const validateUserInput = async (values: z.infer<typeof formSchema>) => {
     try {
-      const parsedData = await formSchema.parseAsync(values);
-      if (parsedData) {
-        const username = parsedData.username.toString();
-        const email = parsedData.email.toString();
-        const password = parsedData.password.toString();
-        const result = await addUser(username, email, password);
-        if (result > 0) {
-          console.log("User added successfully:", result);
-          localStorage.setItem('userId', result.toString());
-          router.push("/dashboard/personal-tasks");
-        }
+      const isUsernameUnique = await checkUsernameUnique(values.username);
+      if (!isUsernameUnique) {
+        form.setError("username", {
+          type: "manual",
+          message: "Username already exists"
+        });
+        return;
+      }
+
+      const isEmailUnique = await checkEmailUnique(values.email);
+      if (!isEmailUnique) {
+        form.setError("email", {
+          type: "manual",
+          message: "Email already exists"
+        });
+        return;
+      }
+
+      const result = await addUser(values.username, values.email, values.password);
+      if (result > 0) {
+        console.log("User added successfully:", result);
+        localStorage.setItem('userId', result.toString());
+        router.push("/dashboard/personal-tasks");
       }
     } catch (error) {
       console.error("Validation failed:", error);
