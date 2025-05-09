@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+
 const checkUsernameUnique = async (username: string) => {
   try {
     const response = await fetch(`/api/check_username`, {
@@ -61,28 +62,27 @@ const checkEmailUnique = async (email: string) => {
   }
 }
 
-const addUser = async (username: string, email: string, password: string) => {
+const addUser = async (userName: string, userEmail: string, userPassword: string) => {
   try {
     const response = await fetch(`/api/add_user`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, email, password }),
+      body: JSON.stringify({ userName, userEmail, userPassword }),
     });
     if (!response.ok) {
       const errorDetails = await response.text();
       throw new Error(`Network response was not ok: ${response.status} - ${errorDetails}`);
     }
     const data = await response.json();
-    return data.addUser;
+    return data.addUser.toString();
   }
   catch (error) {
     console.error("Error adding user:", error);
     throw new Error("Unable to add user");
   }
 }
-
 
 // REF: https://zod.dev/?id=functions
 const formSchema = z.object({
@@ -172,6 +172,7 @@ export default function Register() {
         const password = parsedData.password.toString();
         const result = await addUser(username, email, password);
         if (result > 0) {
+          console.log("User added successfully:", result);
           localStorage.setItem('userId', result.toString());
           router.push("/dashboard/personal-tasks");
         }

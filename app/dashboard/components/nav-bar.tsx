@@ -19,15 +19,10 @@ const links = [
             { title: "Personal tasks", href: "/dashboard/personal-tasks", enabled: true },
         ],
     },
-    // {
-    //     items: [
-    //         { title: "PageName", href: "/", enabled: true },
-    //     ],
-    // },
     {
         items: [
             { title: "Log out", href: "/static/login", enabled: true },
-            { title: "Toggle Mode", href: "/", enabled: true, toggle: ModeToggle },
+            { title: "Toggle Mode", href: "/NULL", enabled: true, toggle: ModeToggle },
         ],
     },
 ];
@@ -55,7 +50,7 @@ export default function NavBar({ pageName }: NavBarProps) {
                     {isMobile ? (
                         <>
                             <ModeToggle />
-                            <h1 className="text-2xl">{pageName}</h1>
+                            <h1 className="text-4xl">{pageName}</h1>
                             < Drawer direction="right">
                                 <DrawerTrigger>
                                     <MenuIcon className="border rounded-md p-1 h-full w-full" />
@@ -79,7 +74,7 @@ export default function NavBar({ pageName }: NavBarProps) {
                                                                 <NavigationMenuLink
                                                                     href={link.href}
                                                                     variant={link.active ? "active" : "default"}
-                                                                    className="text-foreground tex text-center px-6 py-4 rounded-md text-sm aligm-center"
+                                                                    className="text-foreground text-center px-6 py-4 rounded-md text-sm aligm-center"
                                                                 >
                                                                     {link.title}
                                                                 </NavigationMenuLink>
