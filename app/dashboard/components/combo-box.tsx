@@ -27,6 +27,7 @@ interface ComboboxProps {
   options: TaskList[];
   placeholder?: string;
   value?: number;
+  defaultValue?: number;
   onChange?: (value: number) => void;
   className?: string;
 }
@@ -35,11 +36,12 @@ export function Combobox({
   options,
   placeholder = "Select task list...",
   value: controlledValue,
+  defaultValue,
   onChange,
   className
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false)
-  const [internalValue, setInternalValue] = React.useState(0)
+  const [internalValue, setInternalValue] = React.useState(defaultValue || 0)
 
   const value = controlledValue !== undefined ? controlledValue : internalValue;
 

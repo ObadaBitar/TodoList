@@ -19,7 +19,7 @@ export default function RootLayout({
         <body className="flex flex-col justify-between">
           <ThemeProvider
             attribute="class"
-            defaultTheme="light"
+            defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >
