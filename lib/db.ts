@@ -148,8 +148,25 @@ const add_task = async (taskListID: number, taskName: string, taskDescription: s
   }
 };
 
-// // // // // // // // // //      DELETE     // / // // // / / /// 
+// // // // // // // // // //      EDIT     // / // // // / / /// 
 
+const edit_task = async (taskID: number, taskListID: number, taskName: string, taskDescription: string, taskStatus: number): Promise<boolean> => {
+  try {
+    const query =
+      `
+      UPDATE task
+      SET taskListID = ?, taskName = ?, taskDescription = ?, taskStatus = ?
+      WHERE taskID = ?
+    `;
+    const [rows] = await pool.execute<ResultSetHeader>(query, [taskListID, taskName, taskDescription, taskStatus, taskID]);
+    return rows.affectedRows > 0;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to update task.");
+  }
+};
+
+// // // // // // // // // //      DELETE     // / // // // / / /// 
 
 const delete_task_list = async (taskListID: number): Promise<boolean> => {
   try {
@@ -238,6 +255,7 @@ const fetch_user_task_list_tasks = async (taskListID: number): Promise<UserTasks
       SELECT taskID, taskListID, taskName, taskDescription, taskStatus
       FROM task
       WHERE taskListID = ?
+      ORDER BY taskStatus ASC, taskName ASC
     `;
     const [rows] = await pool.execute<UserTasks[]>(query, [taskListID]);
     return rows;
@@ -249,14 +267,19 @@ const fetch_user_task_list_tasks = async (taskListID: number): Promise<UserTasks
 };
 
 export {
+  // PERSNAL USER
+
   check_username, check_email, check_task_list_name,
 
   check_valid_user,
 
   add_user, add_task_list, add_task,
 
-  delete_task, delete_task_list,
+  edit_task,
 
-  fetch_user_task_lists,
-  fetch_user_task_list_tasks,
+  delete_task_list, delete_task,
+
+  fetch_user_task_lists, fetch_user_task_list_tasks,
+
+
 };
